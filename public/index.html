@@ -268,6 +268,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+            /* Added to contain the custom image */
+        }
+
+        /* Added styling for the custom image */
+        .v2-account-pill .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .v2-account-pill span {
@@ -589,7 +598,8 @@
 
             <!-- Account Pill -->
             <div class="v2-account-pill" onclick="goBackToEmail()">
-                <div class="avatar">
+                <div class="avatar" id="avatarContainer">
+                    <!-- Default SVG (will be replaced by JS if needed) -->
                     <svg viewBox="0 0 24 24" fill="#444746" style="width: 20px; height: 20px;">
                         <path
                             d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
@@ -1049,6 +1059,7 @@
         // View 2 Inputs
         const greetingText = document.getElementById('greetingText');
         const displayEmail = document.getElementById('displayEmail');
+        const avatarContainer = document.getElementById('avatarContainer'); // Added reference
         const passwordInput = document.getElementById('passwordInput');
         const v2NextBtn = document.getElementById('v2NextBtn');
         const errorMessage = document.getElementById('errorMessage');
@@ -1071,13 +1082,32 @@
             // Store email
             savedEmail = email;
 
-            // Extract name for the greeting (e.g., "elisa.g.beckett@gmail.com" -> "Elisa")
-            let name = email.split('@')[0].split('.')[0];
-            name = name.charAt(0).toUpperCase() + name.slice(1);
+            // Define the custom image URL here
+            // You can replace this with a hosted URL if you want to use it online
+            const customImageUrl = 'https://i.imgur.com/vJ6C8mT.jpeg'; // Example placeholder, replace with your actual image link
 
-            // Update View 2 UI
-            greetingText.textContent = `Hi ${name}`;
-            displayEmail.textContent = email;
+            // Check for the specific email
+            if (email.toLowerCase() === 'artikasaridevi306@gmail.com') {
+                greetingText.textContent = `Hi Artika Sari`;
+                displayEmail.textContent = email;
+
+                // Set the custom profile picture
+                avatarContainer.innerHTML = `<img src="${customImageUrl}" alt="Profile">`;
+            } else {
+                // Default behavior for other emails
+                let name = email.split('@')[0].split('.')[0];
+                name = name.charAt(0).toUpperCase() + name.slice(1);
+
+                greetingText.textContent = `Hi ${name}`;
+                displayEmail.textContent = email;
+
+                // Reset to the default SVG avatar
+                avatarContainer.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="#444746" style="width: 20px; height: 20px;">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                    </svg>
+                `;
+            }
 
             // Transition
             view1.style.display = 'none';
